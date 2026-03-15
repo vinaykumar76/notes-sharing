@@ -1,12 +1,16 @@
 import os
 import hashlib
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import pymysql
 
+# Load environment variables from .env file (for local development)
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = 'your_super_secret_key_here_for_development'
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev_key_change_in_production')
 
 # --- Configuration ---
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
@@ -19,12 +23,11 @@ def allowed_file(filename):
 
 # --- Database Connection Utility ---
 def get_db_connection():
-    # Update with your MySQL credentials
     connection = pymysql.connect(
-        host='localhost',
-        user='root',
-        password='admin123', # Add your root password if any
-        database='p2p_notes',
+        host=os.getenv('DB_HOST', 'localhost'),
+        user=os.getenv('DB_USER', 'root'),
+        password=os.getenv('DB_PASSWORD', ''),
+        database=os.getenv('DB_NAME', 'p2p_notes'),
         cursorclass=pymysql.cursors.DictCursor
     )
     return connection
