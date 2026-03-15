@@ -6,8 +6,25 @@ __pycache__/
 .Python
 env/
 .env
+.env.local
 *.db
 *.sqlite
 *.sqlite3
 p2p_notes.db
 .DS_Store
+
+# Flask
+instance/
+.webassets-cache
+
+# Uploads (sensitive data)
+static/uploads/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
