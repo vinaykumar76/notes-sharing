@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Share Knowledge, <span class="highlight">Acite Exams.</span></h1>
+        <p class="hero-subtitle">The ultimate peer-to-peer platform for students to share, discover, and download
+            academic notes for all subjects and semesters.</p>
+        <div class="hero-actions">
+            {% if g.user %}
+            <a href="{{ url_for('browse') }}" class="btn-primary lg"><i class="ph ph-magnifying-glass"></i> Explore
+                Notes</a>
+            <a href="{{ url_for('upload') }}" class="btn-outline lg"><i class="ph ph-upload-simple"></i> Share Yours</a>
+            {% else %}
+            <a href="{{ url_for('register') }}" class="btn-primary lg">Join Now - It's Free</a>
+            <a href="{{ url_for('browse') }}" class="btn-outline lg">Browse First</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-image">
+        <div class="glass-card decorative-card">
+            <div class="card-header">
+                <i class="ph ph-file-pdf"></i>
+                <span>Database_Systems_Ch3.pdf</span>
+            </div>
+            <div class="card-body">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line"></div>
+            </div>
+            <div class="card-footer space-between">
+                <span class="badge">Computer Science</span>
+                <span class="downloads"><i class="ph ph-download-simple"></i> 245</span>
+            </div>
+        </div>
+        <!-- Decorative bg blur -->
+        <div class="glow-blob blob-1"></div>
+        <div class="glow-blob blob-2"></div>
+    </div>
+</section>
+
+<section class="features-section">
+    <h2 class="section-title text-center">Why use UniNotes?</h2>
+    <div class="features-grid">
+        <div class="feature-card glass-card">
+            <div class="feature-icon"><i class="ph ph-student"></i></div>
+            <h3>By Students, For Students</h3>
+            <p>Direct peer-to-peer sharing ensures notes are relevant to your exact syllabus and professors.</p>
+        </div>
+        <div class="feature-card glass-card">
+            <div class="feature-icon"><i class="ph ph-magnifying-glass"></i></div>
+            <h3>Easy Discovery</h3>
+            <p>Filter by branch, semester, or search directly for specific topics to find exactly what you need quickly.
+            </p>
+        </div>
+        <div class="feature-card glass-card">
+            <div class="feature-icon"><i class="ph ph-medal"></i></div>
+            <h3>Quality Content</h3>
+            <p>See download counts to quickly identify the most trusted and helpful notes in your department.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header text-center">
+        <div class="avatar-large">
+            {{ g.user.name[0] | upper }}
+        </div>
+        <h2>{{ g.user.name }}</h2>
+        <p class="role-badge">Student - {{ g.user.branch }}</p>
+    </div>
+
+    <div class="profile-content mt-5">
+        <div class="profile-card glass-card">
+            <h3>Personal Information</h3>
+            <div class="info-list mt-3">
+                <div class="info-item">
+                    <span class="info-label"><i class="ph ph-envelope"></i> Email</span>
+                    <span class="info-value">{{ g.user.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><i class="ph ph-buildings"></i> Branch</span>
+                    <span class="info-value">{{ g.user.branch }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><i class="ph ph-calendar"></i> Year</span>
+                    <span class="info-value">{{ g.user.year }} Year</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label"><i class="ph ph-clock"></i> Member Since</span>
+                    <span class="info-value">{{ g.user.created_at.strftime('%B %Y') if g.user.created_at else 'N/A'
+                        }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-card glass-card">
+            <h3>Activity Summary</h3>
+            <div class="stats-grid mt-3">
+                <div class="stat-box">
+                    <div class="stat-icon uploader"><i class="ph ph-upload-simple"></i></div>
+                    <div class="stat-value">{{ stats.uploads }}</div>
+                    <div class="stat-label">Notes Uploaded</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon downloader"><i class="ph ph-download-simple"></i></div>
+                    <div class="stat-value">{{ stats.downloads }}</div>
+                    <div class="stat-label">Notes Downloaded</div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ url_for('dashboard') }}" class="btn-primary w-100">Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

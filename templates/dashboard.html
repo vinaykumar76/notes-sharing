@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="user-welcome">
+        <h2>Welcome deeply, {{ g.user.name }}</h2>
+        <p>Manage your notes and downloads from your personal dashboard.</p>
+    </div>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('upload') }}" class="btn-primary"><i class="ph ph-upload-simple"></i> Upload New Note</a>
+    </div>
+</div>
+
+<div class="dashboard-tabs">
+    <button class="tab-btn active" onclick="switchTab('uploads')">My Uploads</button>
+    <button class="tab-btn" onclick="switchTab('downloads')">Recent Downloads</button>
+</div>
+
+<!-- Uploads Tab -->
+<div id="uploads-tab" class="tab-content active">
+    {% if uploads %}
+    <div class="notes-grid">
+        {% for note in uploads %}
+        <div class="note-card glass-card">
+            <div class="note-icon">
+                {% if note.file_name.endswith('.pdf') %}
+                <i class="ph ph-file-pdf" style="color: #ef4444;"></i>
+                {% elif note.file_name.endswith('.doc') or note.file_name.endswith('.docx') %}
+                <i class="ph ph-file-doc" style="color: #3b82f6;"></i>
+                {% elif note.file_name.endswith('.ppt') or note.file_name.endswith('.pptx') %}
+                <i class="ph ph-file-ppt" style="color: #f97316;"></i>
+                {% else %}
+                <i class="ph ph-file" style="color: #8b5cf6;"></i>
+                {% endif %}
+            </div>
+            <div class="note-info">
+                <h3>{{ note.title }}</h3>
+                <p class="subject">{{ note.subject }}</p>
+                <div class="meta-tags">
+                    <span class="tag"><i class="ph ph-chalkboard-teacher"></i> Sem {{ note.semester }}</span>
+                    <span class="tag"><i class="ph ph-download-simple"></i> {{ note.download_count }} Downloads</span>
+                </div>
+            </div>
+            <div class="note-actions">
+                <a href="{{ url_for('download', note_id=note.id) }}" class="btn-outline-sm w-100">Download</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state text-center glass-card">
+        <div class="empty-icon"><i class="ph ph-tray"></i></div>
+        <h3>No uploads yet</h3>
+        <p>Start sharing your knowledge with your peers today.</p>
+        <a href="{{ url_for('upload') }}" class="btn-primary mt-3">Upload First Note</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Downloads Tab -->
+<div id="downloads-tab" class="tab-content" style="display: none;">
+    {% if downloads %}
+    <div class="table-responsive glass-card mt-4">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Subject</th>
+                    <th>Downloaded On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in downloads %}
+                <tr>
+                    <td><strong>{{ log.title }}</strong></td>
+                    <td>{{ log.subject }}</td>
+                    <td>{{ log.download_date.strftime('%b %d, %Y') if log.download_date else '' }}</td>
+                    <td>
+                        <a href="{{ url_for('download', note_id=log.note_id) }}" class="text-link"><i
+                                class="ph ph-download-simple"></i> Download Again</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state text-center glass-card">
+        <div class="empty-icon"><i class="ph ph-books"></i></div>
+        <h3>No downloads yet</h3>
+        <p>Explore notes uploaded by other students.</p>
+        <a href="{{ url_for('browse') }}" class="btn-primary mt-3">Browse Notes</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function switchTab(tabId) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+        // Show selected
+        document.getElementById(tabId + '-tab').style.display = 'block';
+
+        // Set active button
+        event.currentTarget.classList.add('active');
+    }
+</script>
+{% endblock %}

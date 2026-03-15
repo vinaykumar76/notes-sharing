@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="upload-container">
+    <div class="page-header text-center">
+        <h2>Upload Notes</h2>
+        <p>Share your study materials and help your peers.</p>
+    </div>
+
+    <div class="upload-card glass-card">
+        <form method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label for="title">Document Title</label>
+                <input type="text" id="title" name="title" required placeholder="e.g. Operating Systems Chapter 1-3">
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required placeholder="e.g. Operating Systems">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description (Optional)</label>
+                <textarea id="description" name="description" rows="3"
+                    placeholder="Briefly describe what these notes cover..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="branch">Branch</label>
+                    <select id="branch" name="branch" required>
+                        <option value="{{ g.user.branch }}" selected>{{ g.user.branch }}</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Mechanical">Mechanical</option>
+                        <option value="Civil">Civil</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group half">
+                    <label for="semester">Semester</label>
+                    <select id="semester" name="semester" required>
+                        <option value="" disabled selected>Select Semester</option>
+                        <option value="1-1">Semester 1-1</option>
+                        <option value="1-2">Semester 1-2</option>
+                        <option value="2-1">Semester 2-1</option>
+                        <option value="2-2">Semester 2-2</option>
+                        <option value="3-1">Semester 3-1</option>
+                        <option value="3-2">Semester 3-2</option>
+                        <option value="4-1">Semester 4-1</option>
+                        <option value="4-2">Semester 4-2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Select File</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="file" name="file" class="file-upload-input"
+                        accept=".pdf,.doc,.docx,.ppt,.pptx" required>
+                    <div class="file-upload-visual" id="file-visual">
+                        <i class="ph ph-upload-simple"></i>
+                        <span id="file-nameDisplay">Click to browse or drag and drop</span>
+                        <small>Supported formats: PDF, DOC, DOCX, PPT, PPTX (Max 20MB)</small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary w-100">Upload Note</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('file').addEventListener('change', function (e) {
+        if (e.target.files.length > 0) {
+            document.getElementById('file-nameDisplay').textContent = e.target.files[0].name;
+            document.getElementById('file-visual').classList.add('has-file');
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="browse-header text-center">
+    <h2>Explore Notes</h2>
+    <p>Find the best study materials from your peers.</p>
+</div>
+
+<div class="search-filter-section glass-card">
+    <form method="GET" action="{{ url_for('browse') }}" class="search-form">
+        <div class="search-input-group">
+            <i class="ph ph-magnifying-glass search-icon"></i>
+            <input type="text" name="q" placeholder="Search by keyword, title, or subject..."
+                value="{{ request.args.get('q', '') }}">
+        </div>
+
+        <div class="filter-group">
+            <select name="branch" class="filter-select">
+                <option value="">All Branches</option>
+                {% for b in branches %}
+                <option value="{{ b }}" {% if request.args.get('branch')==b %}selected{% endif %}>{{ b }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="semester" class="filter-select">
+                <option value="">All Semesters</option>
+                {% for s in ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', '4-1', '4-2'] %}
+                <option value="{{ s }}" {% if request.args.get('semester') == s %}selected{% endif %}>Sem {{ s }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn-primary">Filter</button>
+            <a href="{{ url_for('browse') }}" class="btn-outline text-center" style="padding: 0.6rem 1rem;">Clear</a>
+        </div>
+    </form>
+</div>
+
+{% if notes %}
+<div class="notes-grid mt-5">
+    {% for note in notes %}
+    <div class="note-card glass-card">
+        <div class="note-header">
+            <div class="note-icon">
+                {% if note.file_name.endswith('.pdf') %}
+                <i class="ph ph-file-pdf" style="color: #ef4444;"></i>
+                {% elif note.file_name.endswith('.doc') or note.file_name.endswith('.docx') %}
+                <i class="ph ph-file-doc" style="color: #3b82f6;"></i>
+                {% elif note.file_name.endswith('.ppt') or note.file_name.endswith('.pptx') %}
+                <i class="ph ph-file-ppt" style="color: #f97316;"></i>
+                {% else %}
+                <i class="ph ph-file" style="color: #8b5cf6;"></i>
+                {% endif %}
+            </div>
+            <div class="note-uploader">
+                <span class="uploader-name">{{ note.uploader_name }}</span>
+                <span class="upload-date">{{ note.upload_date.strftime('%b %d, %Y') if note.upload_date else ''
+                    }}</span>
+            </div>
+        </div>
+
+        <div class="note-body">
+            <h3>{{ note.title }}</h3>
+            <span class="subject-badge">{{ note.subject }}</span>
+            <p class="description">{{ note.description[:100] + '...' if note.description and note.description|length >
+                100 else note.description }}</p>
+        </div>
+
+        <div class="note-footer">
+            <div class="note-meta">
+                <span><i class="ph ph-buildings"></i> {{ note.branch }} (Sem {{ note.semester }})</span>
+                <span><i class="ph ph-download-simple"></i> {{ note.download_count }}</span>
+            </div>
+            <a href="{{ url_for('note_details', note_id=note.id) }}" class="btn-primary-sm">View Details</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state text-center glass-card mt-5">
+    <div class="empty-icon"><i class="ph ph-magnifying-glass"></i></div>
+    <h3>No notes found</h3>
+    <p>Try adjusting your search criteria or filters.</p>
+</div>
+{% endif %}
+{% endblock %}
